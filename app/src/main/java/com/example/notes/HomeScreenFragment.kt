@@ -5,10 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.databinding.FragmentHomeScreenBinding
+import com.example.notes.model.AppDatabase
+import com.example.notes.model.NoteRepository
+import com.example.notes.viewModel.NoteViewModel
+import com.example.notes.viewModel.NoteViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 import layout.NotesAdapter
 
@@ -16,8 +21,12 @@ class HomeScreenFragment : Fragment() {
     private var _binding: FragmentHomeScreenBinding? = null
     private val binding get() = _binding!!
 
-    lateinit var adapter: NotesAdapter
-    val dataSet: MutableList<String> = mutableListOf()
+    private val database by lazy { context?.let { AppDatabase.getDatabase(it) } }
+    private val repository by lazy { database?.let { NoteRepository(it.noteDao()) } }
+
+    private lateinit var adapter: NotesAdapter
+    private lateinit var noteViewModel: NoteViewModel
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,10 +35,12 @@ class HomeScreenFragment : Fragment() {
         _binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        dataSet.addAll(mutableListOf("teste1", "teste2", "teste3", "teste4", "teste5"))
-        adapter = NotesAdapter(dataSet.toTypedArray())
+        noteViewModel = repository?.let { NoteViewModelFactory(it).create(NoteViewModel::class.java) }!!
+        noteViewModel.allNotes.observe(viewLifecycleOwner, Observer {
+            adapter = NotesAdapter(noteViewModel.allNotes)
+        })
         val recyclerView = binding.homeScreenRecyclerView
-        recyclerView.adapter = adapter
+        recyclerView.adapter = NotesAdapter(noteViewModel.allNotes)
 
         swipeToDelete(recyclerView)
 
@@ -52,10 +63,10 @@ class HomeScreenFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-                val deletedCourse = dataSet.get(position)
+                val deletedCourse = noteViewModel.allNotes.value?.get(position)
 
-                dataSet.removeAt(position)
-                adapter = NotesAdapter(dataSet.toTypedArray())
+                noteViewModel.removeAt(position)
+                adapter = NotesAdapter(noteViewModel.allNotes)
                 recyclerView.adapter = adapter
                 adapter.notifyItemRemoved(position)
 
@@ -63,8 +74,8 @@ class HomeScreenFragment : Fragment() {
                     .setAction(
                         "Undo",
                         View.OnClickListener {
-                            dataSet.add(position, deletedCourse)
-                            adapter = NotesAdapter(dataSet.toTypedArray())
+                            deletedCourse?.let { note -> noteViewModel.addAt(position, note) }
+                            adapter = NotesAdapter(noteViewModel.allNotes)
                             recyclerView.adapter = adapter
                             adapter.notifyItemInserted(position)
                         }).show()
