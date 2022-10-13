@@ -2,21 +2,29 @@ package com.example.notes.viewModel
 
 import androidx.lifecycle.*
 import com.example.notes.model.NoteModel
-import com.example.notes.model.NoteRepository
+import com.example.notes.repository.NoteRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
-    val allNotes: LiveData<List<NoteModel>> = noteRepository.allNotes.asLiveData()
+    val allNotes: LiveData<List<NoteModel>> by lazy { noteRepository.allNotes.asLiveData() }
 
-    fun insert(note: NoteModel) = viewModelScope.launch {
+    fun insert(note: NoteModel) = viewModelScope.launch(Dispatchers.IO) {
         noteRepository.insert(note)
     }
 
-    fun removeAt(position: Int) {
-
+    fun updateNotes(notes: NoteModel) = viewModelScope.launch(Dispatchers.IO) {
+        noteRepository.updateNotes(notes)
     }
 
-    fun addAt(position: Int, note: NoteModel){
+    fun remove(position: Int) = viewModelScope.launch(Dispatchers.IO) {
+        if(allNotes.value?.size!! > 0){
+            val note = allNotes.value?.get(position)
+            note?.let { noteRepository.delete(it) }
+        }
+    }
+
+    fun addAt(position: Int, note: NoteModel) {
 
     }
 }

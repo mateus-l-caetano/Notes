@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NoteFragment">
+    tools:context=".fragments.NoteFragment">
 
     <ImageButton
         android:id="@+id/backButton"
@@ -12,6 +12,17 @@
         android:layout_height="wrap_content"
         android:background="@drawable/ic_backbutton"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginVertical="32dp"
+        android:layout_marginHorizontal="16dp"
+        />
+
+    <ImageButton
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_savebutton"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginVertical="32dp"
         android:layout_marginHorizontal="16dp"

@@ -1,4 +1,4 @@
-package com.example.notes
+package com.example.notes.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,13 +9,14 @@ import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.example.notes.R
+import com.example.notes.adapters.NotesAdapter
 import com.example.notes.databinding.FragmentHomeScreenBinding
-import com.example.notes.model.AppDatabase
-import com.example.notes.model.NoteRepository
+import com.example.notes.data.AppDatabase
+import com.example.notes.repository.NoteRepository
 import com.example.notes.viewModel.NoteViewModel
 import com.example.notes.viewModel.NoteViewModelFactory
 import com.google.android.material.snackbar.Snackbar
-import layout.NotesAdapter
 
 class HomeScreenFragment : Fragment() {
     private var _binding: FragmentHomeScreenBinding? = null
@@ -27,7 +28,6 @@ class HomeScreenFragment : Fragment() {
     private lateinit var adapter: NotesAdapter
     private lateinit var noteViewModel: NoteViewModel
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -35,12 +35,12 @@ class HomeScreenFragment : Fragment() {
         _binding = FragmentHomeScreenBinding.inflate(inflater, container, false)
         val view = binding.root
 
+        val recyclerView = binding.homeScreenRecyclerView
         noteViewModel = repository?.let { NoteViewModelFactory(it).create(NoteViewModel::class.java) }!!
         noteViewModel.allNotes.observe(viewLifecycleOwner, Observer {
             adapter = NotesAdapter(noteViewModel.allNotes)
+            recyclerView.adapter = NotesAdapter(noteViewModel.allNotes)
         })
-        val recyclerView = binding.homeScreenRecyclerView
-        recyclerView.adapter = NotesAdapter(noteViewModel.allNotes)
 
         swipeToDelete(recyclerView)
 
@@ -65,12 +65,9 @@ class HomeScreenFragment : Fragment() {
                 val position = viewHolder.adapterPosition
                 val deletedCourse = noteViewModel.allNotes.value?.get(position)
 
-                noteViewModel.removeAt(position)
-                adapter = NotesAdapter(noteViewModel.allNotes)
-                recyclerView.adapter = adapter
-                adapter.notifyItemRemoved(position)
+                noteViewModel.remove(position)
 
-                Snackbar.make(recyclerView, "Deleted " + deletedCourse, Snackbar.LENGTH_LONG)
+                Snackbar.make(recyclerView, "Deleted " + deletedCourse?.title, Snackbar.LENGTH_LONG)
                     .setAction(
                         "Undo",
                         View.OnClickListener {

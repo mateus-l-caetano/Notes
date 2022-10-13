@@ -1,22 +1,20 @@
-package layout
+package com.example.notes.adapters
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LiveData
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.notes.R
+import com.example.notes.fragments.HomeScreenFragmentDirections
 import com.example.notes.model.NoteModel
 
 class NotesAdapter(private val dataSet: LiveData<List<NoteModel>>)
     : RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView
-
-        init {
-            textView = view.findViewById(R.id.notesListItem)
-        }
+    class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.notesListItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,7 +24,16 @@ class NotesAdapter(private val dataSet: LiveData<List<NoteModel>>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = "${dataSet.value?.get(position)?.title}: ${dataSet.value?.get(position)?.content}"
+        holder.textView.text = "${dataSet.value?.get(position)?.title}"
+        holder.view.setOnClickListener { view ->
+            val note = dataSet.value?.get(position)?.let { NoteModel(it.uid, it.title, it.content) }
+            val action = note?.let {
+                HomeScreenFragmentDirections.actionHomeScreenFragmentToNoteFragment(
+                    it
+                )
+            }
+            action?.let { view.findNavController().navigate(it) }
+        }
     }
 
     override fun getItemCount(): Int {

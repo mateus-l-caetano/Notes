@@ -1,9 +1,8 @@
-package com.example.notes.model
+package com.example.notes.data
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.lifecycle.LiveData
+import androidx.room.*
+import com.example.notes.model.NoteModel
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -18,8 +17,11 @@ interface NoteDAO {
     fun findByTitle(title: String): NoteModel
 
     @Insert
-    fun insert(note: NoteModel)
+    suspend fun insert(note: NoteModel)
+
+    @Update
+    fun updateNotes(note: NoteModel)
 
     @Delete
-    fun delete(note: NoteModel)
+    suspend fun delete(note: NoteModel)
 }
