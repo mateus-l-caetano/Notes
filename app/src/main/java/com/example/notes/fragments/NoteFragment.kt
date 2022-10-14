@@ -1,13 +1,14 @@
 package com.example.notes.fragments
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import com.example.notes.R
+import androidx.navigation.fragment.navArgs
 import com.example.notes.databinding.FragmentNoteBinding
 import com.example.notes.data.AppDatabase
 import com.example.notes.model.NoteModel
@@ -24,6 +25,7 @@ class NoteFragment : Fragment() {
     private val repository by lazy { database?.let { NoteRepository(it.noteDao()) } }
 
     private lateinit var noteViewModel: NoteViewModel
+    private val args by navArgs<NoteFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,19 +36,40 @@ class NoteFragment : Fragment() {
 
         noteViewModel = repository?.let { NoteViewModelFactory(it).create(NoteViewModel::class.java) }!!
 
-        binding.backButton.setOnClickListener { it.findNavController().popBackStack() }
-        binding.saveButton.setOnClickListener {
-            noteViewModel.insert(
-                NoteModel(
-                    uid = 0,
-                    title = binding.noteScreenTitle.text.toString(),
-                    content = binding.noteScreenDescription.text.toString()
-                )
-            )
+        val note = args.note
+        if(note.title?.isNotBlank() == true) {
+            binding.noteScreenTitle.text = Editable.Factory.getInstance().newEditable(note.title) //note.title as Editable
+            binding.noteScreenDescription.text = Editable.Factory.getInstance().newEditable(note.content) //note.content as Editable
 
-            Snackbar.make(view, "Nota adicionada", Snackbar.LENGTH_SHORT).show()
-            findNavController().popBackStack()
+            binding.saveButton.setOnClickListener {
+                noteViewModel.updateNote(
+                    NoteModel(
+                        uid = note.uid,
+                        title = binding.noteScreenTitle.text.toString(),
+                        content = binding.noteScreenDescription.text.toString()
+                    )
+                )
+
+                Snackbar.make(view, "Nota atualizada", Snackbar.LENGTH_SHORT).show()
+                findNavController().popBackStack()
+            }
         }
+        else {
+            binding.saveButton.setOnClickListener {
+                noteViewModel.insert(
+                    NoteModel(
+                        uid = 0,
+                        title = binding.noteScreenTitle.text.toString(),
+                        content = binding.noteScreenDescription.text.toString()
+                    )
+                )
+
+                Snackbar.make(view, "Nota adicionada", Snackbar.LENGTH_SHORT).show()
+                findNavController().popBackStack()
+            }
+        }
+
+        binding.backButton.setOnClickListener { it.findNavController().popBackStack() }
 
         return view
     }

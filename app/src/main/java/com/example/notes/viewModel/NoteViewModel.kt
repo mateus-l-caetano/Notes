@@ -13,8 +13,8 @@ class NoteViewModel(private val noteRepository: NoteRepository) : ViewModel() {
         noteRepository.insert(note)
     }
 
-    fun updateNotes(notes: NoteModel) = viewModelScope.launch(Dispatchers.IO) {
-        noteRepository.updateNotes(notes)
+    fun updateNote(notes: NoteModel) = viewModelScope.launch(Dispatchers.IO) {
+        noteRepository.updateNote(notes)
     }
 
     fun remove(position: Int) = viewModelScope.launch(Dispatchers.IO) {

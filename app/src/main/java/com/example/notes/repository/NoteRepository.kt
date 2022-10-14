@@ -23,8 +23,8 @@ class NoteRepository(private val noteDAO: NoteDAO) {
         return noteDAO.findByTitle(title)
     }
 
-    fun updateNotes(notes: NoteModel) {
-        return noteDAO.updateNotes(notes)
+    fun updateNote(notes: NoteModel) {
+        return noteDAO.updateNote(notes)
     }
 
     suspend fun delete(note: NoteModel) {

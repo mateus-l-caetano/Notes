@@ -13,6 +13,7 @@ import com.example.notes.R
 import com.example.notes.adapters.NotesAdapter
 import com.example.notes.databinding.FragmentHomeScreenBinding
 import com.example.notes.data.AppDatabase
+import com.example.notes.model.NoteModel
 import com.example.notes.repository.NoteRepository
 import com.example.notes.viewModel.NoteViewModel
 import com.example.notes.viewModel.NoteViewModelFactory
@@ -45,7 +46,9 @@ class HomeScreenFragment : Fragment() {
         swipeToDelete(recyclerView)
 
         binding.floatingActionButton.setOnClickListener {
-            it.findNavController().navigate(R.id.action_homeScreenFragment_to_noteFragment)
+            val note = NoteModel(0, "", "")
+            val action = HomeScreenFragmentDirections.actionHomeScreenFragmentToNoteFragment(note)
+            it.findNavController().navigate(action)
         }
 
         return view
