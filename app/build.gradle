@@ -10,7 +10,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.notes"
+        applicationId "com.mateus.notes"
         minSdk 23
         targetSdk 33
         versionCode 1
