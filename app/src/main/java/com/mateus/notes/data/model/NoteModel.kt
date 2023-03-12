@@ -1,15 +1,19 @@
-package com.mateus.notes.model
+package com.mateus.notes.data.model
 
-import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kotlinx.parcelize.Parcelize
+import com.mateus.notes.domain.model.Note
 
 @Entity
-@Parcelize
 data class NoteModel (
     @PrimaryKey(autoGenerate = true) val uid: Int,
     @ColumnInfo(name="title") val title: String?,
     @ColumnInfo(name="content") val content: String?
-):Parcelable
+)
+
+fun NoteModel.toNote() : Note = Note(
+    id = uid,
+    title = title,
+    content = content
+)

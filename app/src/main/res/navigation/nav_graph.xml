@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/homeScreenFragment"
-        android:name="com.mateus.notes.fragments.HomeScreenFragment"
+        android:name="com.mateus.notes.presentation.fragments.HomeScreenFragment"
         android:label="fragment_home_screen"
         tools:layout="@layout/fragment_home_screen" >
         <action
@@ -19,15 +19,15 @@
             app:popExitAnim="@android:anim/fade_out" />
         <argument
             android:name="note"
-            app:argType="com.mateus.notes.model.NoteModel" />
+            app:argType="com.mateus.notes.domain.model.Note" />
     </fragment>
     <fragment
         android:id="@+id/noteFragment"
-        android:name="com.mateus.notes.fragments.NoteFragment"
+        android:name="com.mateus.notes.presentation.fragments.NoteFragment"
         android:label="fragment_note"
         tools:layout="@layout/fragment_note" >
         <argument
             android:name="note"
-            app:argType="com.mateus.notes.model.NoteModel" />
+            app:argType="com.mateus.notes.domain.model.Note" />
     </fragment>
 </navigation>
