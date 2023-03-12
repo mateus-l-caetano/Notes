@@ -9,14 +9,31 @@
     android:clickable="true"
     app:cardCornerRadius="8dp">
 
-    <TextView
-        android:id="@+id/notesListItem"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:text="olá"
-        android:gravity="center"
-        android:textSize="25sp"
-        android:padding="24dp"
-        />
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/notesListItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="olá"
+            android:textSize="25sp"
+            android:paddingTop="16dp"
+            android:paddingHorizontal="16.dp"
+            android:paddingBottom="8.dp"
+            style="@style/TextAppearance.Material3.TitleMedium"
+            />
+
+        <TextView
+            android:id="@+id/notesListItemContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="hello world"
+            android:paddingHorizontal="16.dp"
+            android:paddingBottom="16.dp"
+            style="@style/TextAppearance.AppCompat.Body1"
+            />
+    </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>

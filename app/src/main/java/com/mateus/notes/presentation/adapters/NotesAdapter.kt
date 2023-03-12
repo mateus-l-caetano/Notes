@@ -13,7 +13,8 @@ import com.mateus.notes.domain.model.Note
 class NotesAdapter(private val dataSet: List<Note>)
     : RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.notesListItem)
+        val title: TextView = view.findViewById(R.id.notesListItem)
+        val content: TextView = view.findViewById(R.id.notesListItem)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,7 +24,13 @@ class NotesAdapter(private val dataSet: List<Note>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = "${dataSet[position].title}"
+        holder.title.text = "${dataSet[position].title}"
+        holder.content.text = "${dataSet[position].content}".also {
+            if (it.length <= 50)
+                it
+            else
+                it.substring(0..50)
+        }
 
         holder.view.setOnClickListener { view ->
             val note = Note(dataSet[position].id, dataSet[position].title, dataSet[position].content)
