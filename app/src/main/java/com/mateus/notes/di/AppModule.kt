@@ -45,32 +45,4 @@ object AppModule {
     ) : INoteRepository {
         return NoteRepositoryImpl(noteDAO)
     }
-
-    @Provides
-    fun provideGetNotesUseCase(
-        noteRepository: INoteRepository
-    ) : GetNotesUseCaseImpl {
-        return GetNotesUseCaseImpl(noteRepository)
-    }
-
-    @Provides
-    fun provideInsertNoteUseCase(
-        noteRepository: INoteRepository
-    ) : InsertNoteUseCaseImpl {
-        return InsertNoteUseCaseImpl(noteRepository)
-    }
-
-    @Provides
-    fun provideUpdateNoteUseCase(
-        noteRepository: INoteRepository
-    ) : UpdateNoteUseCaseImpl {
-        return UpdateNoteUseCaseImpl(noteRepository)
-    }
-
-    @Provides
-    fun provideDeleteNoteUseCase(
-        noteRepository: INoteRepository
-    ) : DeleteNoteUseCaseImpl {
-        return DeleteNoteUseCaseImpl(noteRepository)
-    }
 }
