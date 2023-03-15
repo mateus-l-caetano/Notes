@@ -43,8 +43,6 @@ class NoteFragment : Fragment() {
         else {
             setSaveButtonClick(view)
         }
-
-        binding.backButton.setOnClickListener { it.findNavController().popBackStack() }
     }
 
     private fun setSaveButtonClick(view: View) {

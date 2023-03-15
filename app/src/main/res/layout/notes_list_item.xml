@@ -18,20 +18,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="olá"
-            android:textSize="25sp"
             android:paddingTop="16dp"
             android:paddingHorizontal="16dp"
-            style="@style/TextAppearance.Material3.TitleMedium"
+            style="@style/TextAppearance.Material3.TitleLarge"
             />
 
         <TextView
             android:id="@+id/notesListItemContent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="hello world"
             android:paddingHorizontal="16dp"
             android:paddingBottom="16dp"
-            style="@style/TextAppearance.AppCompat.Body1"
+            style="@style/TextAppearance.Material3.BodyMedium"
+            tools:text="hello world"
             />
     </LinearLayout>
 
