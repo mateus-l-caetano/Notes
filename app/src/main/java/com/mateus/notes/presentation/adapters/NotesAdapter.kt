@@ -13,8 +13,8 @@ import com.mateus.notes.domain.model.Note
 class NotesAdapter(private val dataSet: List<Note>)
     : RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
     class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val title: TextView = view.findViewById(R.id.notesListItem)
-        val content: TextView = view.findViewById(R.id.notesListItem)
+        val title: TextView = view.findViewById(R.id.notesListItemTitle)
+        val content: TextView = view.findViewById(R.id.notesListItemContent)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
