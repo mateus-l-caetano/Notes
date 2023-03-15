@@ -20,8 +20,7 @@
             tools:text="olá"
             android:textSize="25sp"
             android:paddingTop="16dp"
-            android:paddingHorizontal="16.dp"
-            android:paddingBottom="8.dp"
+            android:paddingHorizontal="16dp"
             style="@style/TextAppearance.Material3.TitleMedium"
             />
 
@@ -30,8 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="hello world"
-            android:paddingHorizontal="16.dp"
-            android:paddingBottom="16.dp"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="16dp"
             style="@style/TextAppearance.AppCompat.Body1"
             />
     </LinearLayout>
