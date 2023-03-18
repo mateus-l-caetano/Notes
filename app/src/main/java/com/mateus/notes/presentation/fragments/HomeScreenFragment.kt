@@ -1,7 +1,6 @@
 package com.mateus.notes.presentation.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,15 +40,16 @@ class HomeScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        noteViewModel.allNotes.observe(viewLifecycleOwner) {
-            Log.d("nota", "entrou no observer")
-
-            Log.d("nota", "")
-            it.map { nota -> Log.d("nota", "view $nota") }
-            Log.d("nota", "")
-
-            adapter = NotesAdapter(it ?: emptyList())
-            recyclerView.adapter = adapter
+        noteViewModel.allNotes.observe(viewLifecycleOwner) {notes ->
+            if (notes.isNotEmpty()){
+                adapter = NotesAdapter(notes)
+                recyclerView.adapter = adapter
+                recyclerView.visibility = View.VISIBLE
+                binding.emptyState.root.visibility = View.GONE
+            } else {
+                recyclerView.visibility = View.INVISIBLE
+                binding.emptyState.root.visibility = View.VISIBLE
+            }
         }
 
         swipeToDelete(recyclerView)
@@ -74,25 +74,10 @@ class HomeScreenFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
                 val deletedNote = noteViewModel.allNotes.value?.get(position)
-//
-//                val note = adapter.getNoteAtPosition(position)
-//
-//                Log.d("nota", note.toString())
-//
+
                 if (deletedNote != null) {
-                    Log.d("nota", "delete view")
                     noteViewModel.remove(deletedNote)
                 }
-//
-//                Snackbar.make(recyclerView, "${deletedCourse?.title} deletado", Snackbar.LENGTH_LONG)
-//                    .setAction(
-//                        "Desfazer"
-//                    ) {
-//                        deletedCourse?.let { note -> noteViewModel.addAt(position, note) }
-//                        adapter = NotesAdapter(noteViewModel.allNotes.value?.toList() ?: listOf())
-//                        recyclerView.adapter = adapter
-//                        adapter.notifyItemInserted(position)
-//                    }.show()
             }
         }).attachToRecyclerView(recyclerView)
     }

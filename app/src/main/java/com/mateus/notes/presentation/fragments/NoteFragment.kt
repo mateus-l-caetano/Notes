@@ -54,15 +54,7 @@ class NoteFragment : Fragment() {
                 )
             )
 
-            noteViewModel.state.observe(viewLifecycleOwner) {
-                if(it.data == true){
-                    binding.indicator.visibility = View.VISIBLE
-                } else {
-                    binding.indicator.visibility = View.INVISIBLE
-                    Snackbar.make(view, "Nota adicionada", Snackbar.LENGTH_SHORT).show()
-                    findNavController().popBackStack()
-                }
-            }
+            observeState(view, "Nota adicionada")
         }
     }
 
@@ -76,8 +68,19 @@ class NoteFragment : Fragment() {
                 )
             )
 
-            Snackbar.make(view, "Nota atualizada", Snackbar.LENGTH_SHORT).show()
-            findNavController().popBackStack()
+            observeState(view, "Nota atualizada")
+        }
+    }
+
+    private fun observeState(view: View, message: String) {
+        noteViewModel.state.observe(viewLifecycleOwner) {
+            if (it.data == true) {
+                binding.indicator.visibility = View.VISIBLE
+            } else {
+                binding.indicator.visibility = View.INVISIBLE
+                Snackbar.make(view, message, Snackbar.LENGTH_SHORT).show()
+                findNavController().popBackStack()
+            }
         }
     }
 
