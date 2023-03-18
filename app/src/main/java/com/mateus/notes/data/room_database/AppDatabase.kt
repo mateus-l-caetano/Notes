@@ -1,4 +1,4 @@
-package com.mateus.notes.data.datasource
+package com.mateus.notes.data.room_database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

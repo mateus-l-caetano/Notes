@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
@@ -55,8 +54,8 @@ class NoteFragment : Fragment() {
                 )
             )
 
-            noteViewModel.insert.observe(viewLifecycleOwner) {
-                if(!it){
+            noteViewModel.state.observe(viewLifecycleOwner) {
+                if(it.data == true){
                     binding.indicator.visibility = View.VISIBLE
                 } else {
                     binding.indicator.visibility = View.INVISIBLE

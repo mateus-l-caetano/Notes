@@ -2,14 +2,12 @@ package com.mateus.notes.di
 
 import android.content.Context
 import androidx.room.Room
-import com.mateus.notes.data.datasource.AppDatabase
-import com.mateus.notes.data.datasource.NoteDAO
+import com.mateus.notes.data.datasource.INotesLocalDataSource
+import com.mateus.notes.data.datasource.NotesRoomDataSource
+import com.mateus.notes.data.room_database.AppDatabase
+import com.mateus.notes.data.room_database.NoteDAO
 import com.mateus.notes.data.repository.NoteRepositoryImpl
-import com.mateus.notes.domain.use_case.get_note_use_case.GetNotesUseCaseImpl
-import com.mateus.notes.domain.use_case.insert_note_use_case.InsertNoteUseCaseImpl
 import com.mateus.notes.domain.repository.INoteRepository
-import com.mateus.notes.domain.use_case.delete_note_use_case.DeleteNoteUseCaseImpl
-import com.mateus.notes.domain.use_case.update_note_use_case.UpdateNoteUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,10 +17,10 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object DataModule {
     @Provides
     @Singleton
-    fun providesAppDatabase(
+    fun provideAppDatabase(
         @ApplicationContext context: Context
     ) : AppDatabase {
         return Room.databaseBuilder(
@@ -33,16 +31,23 @@ object AppModule {
     }
 
     @Provides
-    fun providesNoteDAO(
+    fun provideNoteDAO(
         appDatabase: AppDatabase
     ) : NoteDAO {
         return appDatabase.noteDao()
     }
 
     @Provides
-    fun provideRepository(
+    fun provideNotesLocalDataSource(
         noteDAO: NoteDAO
+    ) : INotesLocalDataSource {
+        return NotesRoomDataSource(noteDAO)
+    }
+
+    @Provides
+    fun provideRepository(
+        notesLocalDataSource: INotesLocalDataSource
     ) : INoteRepository {
-        return NoteRepositoryImpl(noteDAO)
+        return NoteRepositoryImpl(notesLocalDataSource)
     }
 }

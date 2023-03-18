@@ -43,7 +43,12 @@ class HomeScreenFragment : Fragment() {
 
         noteViewModel.allNotes.observe(viewLifecycleOwner) {
             Log.d("nota", "entrou no observer")
-            adapter = NotesAdapter(it)
+
+            Log.d("nota", "")
+            it.map { nota -> Log.d("nota", "view $nota") }
+            Log.d("nota", "")
+
+            adapter = NotesAdapter(it ?: emptyList())
             recyclerView.adapter = adapter
         }
 

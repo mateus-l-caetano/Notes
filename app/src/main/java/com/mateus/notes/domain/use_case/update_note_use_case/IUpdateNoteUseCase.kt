@@ -1,7 +1,9 @@
 package com.mateus.notes.domain.use_case.update_note_use_case
 
 import com.mateus.notes.domain.model.Note
+import com.mateus.notes.utlis.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface IUpdateNoteUseCase {
-    operator fun invoke(note : Note): kotlinx.coroutines.flow.Flow<Boolean>
+    operator fun invoke(note : Note): Flow<Resource<Boolean>>
 }

@@ -1,16 +1,15 @@
 package com.mateus.notes.domain.repository
 
-import com.mateus.notes.data.model.NoteModel
+import com.mateus.notes.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
 interface INoteRepository {
 
-    suspend fun getAllNotes() : Flow<List<NoteModel>>
+    suspend fun getAllNotes() : Flow<List<Note>>
 
-    suspend fun insert(note: NoteModel) : Flow<Boolean>
+    suspend fun addNote(note: Note)
 
-    suspend fun updateNote(note: NoteModel) : Flow<Boolean>
+    suspend fun updateNote(note: Note)
 
-    suspend fun delete(note: NoteModel): Flow<Boolean>
-
+    suspend fun removeNote(note: Note)
 }

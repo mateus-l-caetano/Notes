@@ -1,6 +1,5 @@
 package com.mateus.notes.presentation.viewModel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +9,7 @@ import com.mateus.notes.domain.use_case.delete_note_use_case.IDeleteNoteUseCase
 import com.mateus.notes.domain.use_case.get_note_use_case.IGetNotesUseCase
 import com.mateus.notes.domain.use_case.insert_note_use_case.IInsertNoteUseCase
 import com.mateus.notes.domain.use_case.update_note_use_case.IUpdateNoteUseCase
+import com.mateus.notes.utlis.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -27,19 +27,10 @@ class NoteViewModel @Inject constructor(
     }
     val allNotes: LiveData<List<Note>> get() = _allNotes
 
-    private val _insert: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(true)
+    private val _state : MutableLiveData<Resource<Boolean>> by lazy {
+        MutableLiveData<Resource<Boolean>>()
     }
-    val insert: LiveData<Boolean> get() = _insert
-
-    private val _update: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(true)
-    }
-    val update: LiveData<Boolean> get() = _update
-
-    private val _delete: MutableLiveData<Boolean> by lazy {
-        MutableLiveData<Boolean>(true)
-    }
+    val state : LiveData<Resource<Boolean>> get() = _state
 
     init {
         getNotes()
@@ -47,36 +38,40 @@ class NoteViewModel @Inject constructor(
 
     private fun getNotes() {
         viewModelScope.launch(Dispatchers.IO) {
-            getNotesUseCase().collect {
-                _allNotes.postValue(it)
+            getNotesUseCase().collect { notes ->
+                when(notes){
+                    is Resource.Loading -> {
+                    }
+                    is Resource.Error -> {
+                    }
+                    is Resource.Success -> {
+                        _allNotes.postValue(notes.data.orEmpty())
+                    }
+                }
             }
         }
     }
 
     fun insert(note: Note) {
-        _insert.value = false
         viewModelScope.launch(Dispatchers.IO) {
             insertNoteUseCase(note).collect {
-                _insert.postValue(it)
+                _state.postValue(it)
             }
         }
     }
 
     fun updateNote(note: Note) {
-        _update.value = false
         viewModelScope.launch(Dispatchers.IO) {
             updateNoteUseCase(note).collect {
-                _update.postValue(it)
+                _state.postValue(it)
             }
         }
     }
 
     fun remove(note: Note) {
-        Log.d("nota", "delete viewModel")
-        _delete.value = false
         viewModelScope.launch(Dispatchers.IO) {
             deleteNoteUseCase(note).collect {
-                _delete.postValue(it)
+                _state.postValue(it)
             }
         }
     }
