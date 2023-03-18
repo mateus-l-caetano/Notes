@@ -8,18 +8,19 @@
 
     <EditText
         android:id="@+id/noteScreenTitle"
+        style="@style/TextAppearance.Material3.TitleLarge"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
-        android:hint="Title"
-        style="@style/TextAppearance.Material3.TitleLarge"
-        android:paddingVertical="8dp"
-        android:paddingHorizontal="16dp"
         android:background="@android:color/transparent"
-        />
+        android:hint="Title"
+        android:minHeight="48dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/noteScreenDescription"
